@@ -11,6 +11,23 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container" data-controller="app">
+      <%= render 'layouts/shared/top_nav' %>
+      <div class="row"><%= yield :action_bar %></div>
+      <% if notice %>
+        <div class="alert alert-secondary" role="alert">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="alert alert-danger" role="alert">
+          <%= alert %>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-12"><%= yield %></div>
+      </div>
+    </div>
   </body>
 </html>
