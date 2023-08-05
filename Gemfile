@@ -74,6 +74,7 @@ end
 gem "devise", "~> 4.9"
 gem "cancancan", '~> 3.1'
 gem "bootstrap", "~> 5.1"
+gem "font-awesome-sass", "~> 6.4.2"
 gem "jquery-rails", "~> 4.4"
-gem "react-rails", "~> 2.6"
+gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
 gem "active_link_to", "~> 1.0"
