@@ -1,6 +1,6 @@
-class CreateTasks < ActiveRecord::Migration[7.0]
+class CreateWorkTasks < ActiveRecord::Migration[7.0]
   def change
-    create_table :tasks do |t|
+    create_table :work_tasks do |t|
       t.references :user, null: false, foreign_key: true
       # parent_id used for subtasks
       t.integer :parent_id
