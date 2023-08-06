@@ -17,7 +17,9 @@ class User < ApplicationRecord
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    first = first_name.present? ? first_name : ""
+    last = last_name.present? ? last_name : ""
+    "#{first} #{last}".strip
   end
 
 end
