@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
+  load_and_authorize_resource
   def index
     @projects = Project.all.order(due_date: :asc).includes(:work_tasks)
   end
