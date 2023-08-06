@@ -29,7 +29,10 @@
     <div class="float-end">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <%=link_to edit_user_path(current_user) do %><%=current_user.email %><% end %>
+          <%=link_to edit_user_path(current_user), class: "me-2 btn btn-outline-info" do %><%=current_user.full_name.present? ? current_user.full_name : current_user.email %><% end %>
+        </li>
+        <li class="nav-item">
+          <%=link_to destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" do %>Logout<% end %>
         </li>
       </ul>
     </div>
