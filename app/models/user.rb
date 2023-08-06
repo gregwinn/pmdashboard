@@ -1,8 +1,12 @@
 class User < ApplicationRecord
   has_many :projects
+  has_many :work_tasks, foreign_key: :user_id # Tasks that this user created
+  has_many :assigned_tasks, class_name: "WorkTask", foreign_key: "user_assignment_id"  # tasks assigned to this user
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  validates :email, presence:true, uniqueness: true
 
   # User roles
   enum role: %i[employee pm]
@@ -10,6 +14,10 @@ class User < ApplicationRecord
 
   def set_default_role
     self.role ||= :employee
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 
 end
