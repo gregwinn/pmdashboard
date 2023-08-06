@@ -4,8 +4,14 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
+one:
+  id: 1
+  title: 'My Project One'
+  description: 'My Project One Description'
+  user_id: 1
+  due_date: <%= 3.days.from_now %>
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 1.days.ago %>
+
+#two: {}
 # column: value

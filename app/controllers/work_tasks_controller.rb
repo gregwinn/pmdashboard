@@ -37,6 +37,7 @@ class WorkTasksController < ApplicationController
 
   def update
     @work_task = current_user.work_tasks.find(params[:id])
+    authorize! :update, @work_task
     if @work_task.update(work_task_params)
       redirect_to(project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated.")
     else

@@ -4,8 +4,19 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  id: 1
+  email: "pm_test@test.com"
+  encrypted_password: "$2a$12$4G4HaKEhhhoQT0X.SCTTIOgNq2kAJlPlbHQ4XJ8/gSwh3bSiFyrG."
+  role: :pm
+  first_name: "Michael"
+  last_name: "Scott"
+
+
+two:
+  id: 2
+  email: "employee_test@test.com"
+  encrypted_password: "$2a$12$4G4HaKEhhhoQT0X.SCTTIOgNq2kAJlPlbHQ4XJ8/gSwh3bSiFyrG."
+  role: :employee
+  first_name: "Dwight"
+  last_name: "Schrute"

@@ -4,8 +4,30 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  id: 1
+  title: 'My task One'
+  user_id: 1
+  description: 'My description'
+  work_focus: 'marketing'
+  status: 'not_started'
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+  project_id: 1
+  due_date: <%= 1.day.from_now %>
+  user_assignment_id: 2
+
+
+two:
+  id: 2
+  title: 'My subtask to task One'
+  user_id: 2
+  parent_id: 1
+  description: 'My description'
+  work_focus: 'marketing'
+  status: 'not_started'
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+  project_id: 1
+  due_date: <%= 1.day.from_now %>
+  user_assignment_id: 2
