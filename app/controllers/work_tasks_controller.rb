@@ -48,14 +48,27 @@ class WorkTasksController < ApplicationController
       remove_sidekiq_job(@work_task)
     end
 
-    if @work_task.update(work_task_params)
-      # Create a delayed job to check if the task is overdue
-      CheckTaskJob.perform_at(@work_task.due_date.to_time.to_i, @work_task.id)
+    # Only allow the status to be changed if the user is an employee and the task is not overdue
+    if (@work_task.can_employee_change_status?(work_task_params[:status]) && current_user.employee?) || current_user.pm?
 
-      redirect_to(project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated.")
+      respond_to do |format|
+        if @work_task.update(work_task_params)
+          # Create a delayed job to check if the task is overdue
+          CheckTaskJob.perform_at(@work_task.due_date.to_time.to_i, @work_task.id)
+
+          format.html { redirect_to project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated." }
+          format.json { render :show, status: :ok, location: @work_task }
+          format.js
+        else
+          format.html { render :edit, alert: "Work task could not be updated." }
+          format.json { render json: @work_task.errors, status: :unprocessable_entity }
+          format.js
+        end
+      end
     else
-      render :edit, alert: "Work task could not be updated."
+      redirect_to project_work_task_path(@work_task.project, @work_task), alert: "You cannot change the status of this task to: #{work_task_params[:status].titleize}."
     end
+
   end
 
   def destroy

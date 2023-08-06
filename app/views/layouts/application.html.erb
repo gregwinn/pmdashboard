@@ -15,12 +15,12 @@
       <%= render 'layouts/shared/top_nav' %>
       <div class="row"><%= yield :action_bar %></div>
       <% if notice %>
-        <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-secondary mb-3" role="alert">
           <%= notice %>
         </div>
       <% end %>
       <% if alert %>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger mb-3" role="alert">
           <%= alert %>
         </div>
       <% end %>

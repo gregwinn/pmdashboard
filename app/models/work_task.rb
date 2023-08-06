@@ -3,7 +3,8 @@ class WorkTask < ApplicationRecord
   belongs_to :user
   belongs_to :parent, class_name: "WorkTask", optional: true
   has_many :subtasks, class_name: "WorkTask", foreign_key: "parent_id", dependent: :destroy
-  belongs_to :user_assignment, class_name: "User", foreign_key: "user_assignment_id", optional: true  # the user to whom the task is assigned
+  # the user to whom the task is assigned
+  belongs_to :user_assignment, class_name: "User", foreign_key: "user_assignment_id", optional: true
 
   validates :title, presence: true
   validates :description, presence: true
@@ -48,5 +49,11 @@ class WorkTask < ApplicationRecord
   # Check to see if a task has a parent
   def has_parent?
     parent_id.present?
+  end
+
+  # Helper to see if an employee can change the status of a
+  # task to something other than "working" or "needs_review"
+  def can_employee_change_status?(new_status)
+    %w[working needs_review].include?(new_status)
   end
 end
