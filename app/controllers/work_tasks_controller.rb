@@ -24,6 +24,10 @@ class WorkTasksController < ApplicationController
     @work_task = @project.work_tasks.new(work_task_params)
     @work_task.user = current_user
     if @work_task.save
+
+      # Create a delayed job to check if the task is overdue
+      CheckTaskJob.perform_at(@work_task.due_date.to_time.to_i, @work_task.id)
+
       if @work_task.has_parent?
         redirect_to project_work_task_path(@work_task.project, @work_task.parent), notice: "Work task was successfully created."
       else
@@ -38,6 +42,12 @@ class WorkTasksController < ApplicationController
   def update
     @work_task = current_user.work_tasks.find(params[:id])
     authorize! :update, @work_task
+
+    if @work_task.due_date != work_task_params[:due_date]
+      # Delete the old delayed job
+      remove_sidekiq_job(@work_task)
+    end
+
     if @work_task.update(work_task_params)
       redirect_to(project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated.")
     else
@@ -57,6 +67,15 @@ class WorkTasksController < ApplicationController
   end
 
   private
+
+  def remove_sidekiq_job(work_task)
+    jobs = Sidekiq::ScheduledSet.new
+    jobs.each do |job|
+      if job.jid == work_task.sidekiq_job_id
+        job.delete
+      end
+    end
+  end
 
   def work_task_params
     params.require(:work_task).permit(:title, :description, :due_date, :status, :work_focus, :user_assignment_id, :parent_id)

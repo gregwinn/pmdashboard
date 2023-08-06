@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_05_225048) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_06_191219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_05_225048) do
     t.bigint "project_id", null: false
     t.date "due_date"
     t.integer "user_assignment_id"
+    t.string "sidekiq_job_id"
     t.index ["project_id"], name: "index_work_tasks_on_project_id"
     t.index ["user_id"], name: "index_work_tasks_on_user_id"
   end

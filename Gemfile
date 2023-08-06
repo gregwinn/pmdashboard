@@ -78,3 +78,5 @@ gem "font-awesome-sass", "~> 6.4.2"
 gem "jquery-rails", "~> 4.4"
 gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
 gem "active_link_to", "~> 1.0"
+
+gem 'sidekiq', '~> 6.2', '>= 6.2.2'
