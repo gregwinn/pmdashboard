@@ -1,8 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import moment from 'moment'
 
-import ProjectForm  from '../components/projects/project_form'
-
 export default class extends Controller {
     static targets = ["project_form"]
     static values = { duedate: String }
