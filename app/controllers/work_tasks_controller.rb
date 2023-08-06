@@ -49,6 +49,9 @@ class WorkTasksController < ApplicationController
     end
 
     if @work_task.update(work_task_params)
+      # Create a delayed job to check if the task is overdue
+      CheckTaskJob.perform_at(@work_task.due_date.to_time.to_i, @work_task.id)
+
       redirect_to(project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated.")
     else
       render :edit, alert: "Work task could not be updated."
