@@ -1,0 +1,38 @@
+<%= form_for [project, work_task] do |form| %>
+  <div class="row">
+    <%=form.hidden_field :parent_id, value: parent_task ? parent_task.id : nil %>
+    <div class="col-6">
+      <%=form.label :title, class: "form-label"%>
+      <%=form.text_field :title, class: "form-control"%>
+    </div>
+    <div class="col-6">
+      <%=form.label :status, class: "form-label"%>
+      <%=form.select :status, WorkTask.statuses.keys.map { |s| [s.titleize, s] }, {}, class: "form-select"%>
+    </div>
+
+    <div class="col-6">
+      <%=form.label :work_focus, class: "form-label"%>
+      <%=form.select :work_focus, WorkTask.work_focus.keys.map { |w| [w.titleize, w] }, {}, class: "form-select"%>
+    </div>
+
+    <div class="col-6">
+      <%=form.label :user_assignment_id, class: "form-label"%>
+      <%=form.select :user_assignment_id, User.all.map { |u| [u.email, u.id] }, {}, class: "form-select"%>
+    </div>
+
+    <div class="col-12">
+      <%=form.label :description, class: "form-label"%>
+      <%=form.text_area :description, class: "form-control"%>
+    </div>
+
+    <div class="col-12">
+      <%=form.label :due_date, class: "form-label"%>
+      <%=form.text_field :due_date, value: work_task.due_date ? work_task.due_date.strftime("%Y-%m-%d") : Date.today.strftime("%Y-%m-%d"), class: "form-control"%>
+    </div>
+
+    <div class="col-12 mt-3">
+      <%=link_to "Cancel", :back, class: "btn btn-outline-secondary" %>
+      <%=form.submit "Create", class: "btn btn-primary float-end"%>
+    </div>
+  </div>
+<% end %>

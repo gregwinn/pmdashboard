@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-12">
+    <% if @parent_task %>
+      <h2>New Sub-Task for: <%=@parent_task.title %></h2>
+    <% else %>
+      <h2>New Task for: <%=@project.title %></h2>
+    <% end %>
+  </div>
+  <div class="col-12" data-controller="project-form">
+    <%= render partial: "form", locals: { parent_task: @parent_task, project: @project, work_task: @work_task } %>
+  </div>
+</div>
