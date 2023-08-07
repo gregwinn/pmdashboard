@@ -36,34 +36,32 @@ class WorkTasksController < ApplicationController
       end
     else
       remove_sidekiq_job(@work_task)
-      puts @work_task.errors.full_messages
       render :new, alert: "Work task could not be created."
     end
   end
 
   def update
-    @work_task = current_user.work_tasks.find(params[:id])
+    @work_task = WorkTask.find(params[:id])
     authorize! :update, @work_task
 
     if @work_task.due_date != work_task_params[:due_date]
       # Delete the old delayed job
       remove_sidekiq_job(@work_task)
+
+      # Create a delayed job to check if the task is overdue
+      @work_task.sidekiq_job_id = CheckTaskJob.perform_at(@work_task.due_date.to_time.to_i, @work_task.id)
     end
 
     # Only allow the status to be changed if the user is an employee and the task is not overdue
     if (@work_task.can_employee_change_status?(work_task_params[:status]) && current_user.employee?) || current_user.pm?
 
       respond_to do |format|
-        # Create a delayed job to check if the task is overdue
-        @work_task.sidekiq_job_id = CheckTaskJob.perform_at(@work_task.due_date.to_time.to_i, @work_task.id)
-
         if @work_task.update(work_task_params)
 
           format.html { redirect_to project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated." }
           format.json { render :show, status: :ok, location: @work_task }
           format.js
         else
-          remove_sidekiq_job(@work_task)
           format.html { render :edit, alert: "Work task could not be updated." }
           format.json { render json: @work_task.errors, status: :unprocessable_entity }
           format.js
