@@ -6,6 +6,10 @@ class WorkTasksController < ApplicationController
 
   def show
     @work_task = WorkTask.find(params[:id])
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @work_task }
+    end
   end
 
   def edit
@@ -24,15 +28,19 @@ class WorkTasksController < ApplicationController
     @work_task = @project.work_tasks.new(work_task_params)
     @work_task.user = current_user
 
-    if @work_task.save
-
-      if @work_task.has_parent?
-        redirect_to project_work_task_path(@work_task.project, @work_task.parent), notice: "Work task was successfully created."
+    respond_to do |format|
+      if @work_task.save
+        if @work_task.has_parent?
+          format.html { redirect_to project_work_task_path(@work_task.project, @work_task.parent), notice: "Work task was successfully created." }
+          format.json { render json: @work_task, status: :created }
+        else
+          format.html { redirect_to project_path(@project), notice: "Work task was successfully created." }
+          format.json { render json: @work_task, status: :created }
+        end
       else
-        redirect_to project_path(@project), notice: "Work task was successfully created."
+        format.html { render :new, alert: "Work task could not be created." }
+        format.json { render json: @work_task.errors, status: :unprocessable_entity }
       end
-    else
-      render :new, alert: "Work task could not be created."
     end
   end
 
@@ -42,33 +50,35 @@ class WorkTasksController < ApplicationController
 
     # Only allow the status to be changed if the user is an employee and the task is not overdue
     if (@work_task.can_employee_change_status?(work_task_params[:status]) && current_user.employee?) || current_user.pm?
-
       respond_to do |format|
         if @work_task.update(work_task_params)
-
           format.html { redirect_to project_work_task_path(@work_task.project, @work_task), notice: "Task was successfully updated." }
-          format.json { render :show, status: :ok, location: @work_task }
-          format.js
+          format.json { render json: @work_task, status: :ok, location: @work_task }
         else
           format.html { render :edit, alert: "Work task could not be updated." }
           format.json { render json: @work_task.errors, status: :unprocessable_entity }
-          format.js
         end
       end
     else
-      redirect_to project_work_task_path(@work_task.project, @work_task), alert: "You cannot change the status of this task to: #{work_task_params[:status].titleize}."
+      respond_to do |format|
+        format.html { redirect_to project_work_task_path(@work_task.project, @work_task), alert: "You cannot change the status of this task to: #{work_task_params[:status].titleize}." }
+        format.json { render json: { error: "You cannot change the status of this task to: #{work_task_params[:status].titleize}." }, status: :unprocessable_entity }
+      end
     end
-
   end
 
   def destroy
     @work_task = current_user.work_tasks.find(params[:id])
     work_task = @work_task
     @work_task.destroy
-    if work_task.has_parent?
-      redirect_to project_work_task_path(work_task.project, work_task.parent), notice: "Work task was successfully deleted."
-    else
-      redirect_to project_path(@work_task.project), notice: "Work task was successfully deleted."
+    respond_to do |format|
+      if work_task.has_parent?
+        format.html { redirect_to project_work_task_path(work_task.project, work_task.parent), notice: "Work task was successfully deleted." }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to project_path(@work_task.project), notice: "Work task was successfully deleted." }
+        format.json { head :no_content }
+      end
     end
   end
 
