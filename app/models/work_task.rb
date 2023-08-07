@@ -11,6 +11,11 @@ class WorkTask < ApplicationRecord
   validates :due_date, presence: true
   validate :due_date_cannot_be_in_the_past, on: [:create, :update]
 
+  # Delayed job is used to check if a task is overdue
+  after_create :enqueue_job
+  before_update :delete_and_reenqueue_job, if: :due_date_changed?
+  before_destroy :delete_job
+
   # Status shows the progress of a work task
   enum status: %i[not_started working needs_review done late]
   after_initialize :set_default_status, if: :new_record?
@@ -55,5 +60,20 @@ class WorkTask < ApplicationRecord
   # task to something other than "working" or "needs_review"
   def can_employee_change_status?(new_status)
     %w[working needs_review].include?(new_status)
+  end
+
+  # Create new job to check if a task is overdue
+  def enqueue_job
+    jid = CheckTaskJob.perform_at(due_date.to_time.to_i, id)
+    update_column(:sidekiq_job_id, jid)
+  end
+  # Delete the old job and create a new one
+  def delete_and_reenqueue_job
+    delete_job
+    enqueue_job
+  end
+  # Delete the job if it exists
+  def delete_job
+    Sidekiq::ScheduledSet.new.find_job(sidekiq_job_id).try(:delete) if sidekiq_job_id
   end
 end
