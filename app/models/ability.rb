@@ -15,6 +15,10 @@ class Ability
     end
 
     if user.employee?
+      can :manage, User do |u|
+        u.id == user.id
+      end
+
       can :update, WorkTask do |work_task|
         work_task.user_assignment_id == user.id
       end
