@@ -32,4 +32,5 @@ class WorkTaskTest < ActiveSupport::TestCase
   test "should return true when task has a parent" do
     assert @sub_task.has_parent?
   end
+
 end
