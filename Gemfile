@@ -71,7 +71,12 @@ group :test do
   gem "webdrivers"
 end
 
+gem 'rack-cors'
+
 gem "devise", "~> 4.9"
+gem 'devise-jwt', '~> 0.7.0'
+gem 'jsonapi-serializer', '~> 2.2'
+
 gem "cancancan", '~> 3.1'
 gem "bootstrap", "~> 5.1"
 gem "font-awesome-sass", "~> 6.4.2"
