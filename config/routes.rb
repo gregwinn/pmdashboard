@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :users do
     get 'tasks', to: 'users#tasks', as: 'tasks'
+    get 'projects', to: 'users#projects', as: 'projects'
   end
 
   resources :projects do

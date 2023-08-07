@@ -14,14 +14,16 @@
           </a>
           <ul class="dropdown-menu">
             <li><%=active_link_to root_path, class: "dropdown-item", active: :exclusive do %>All Projects<%end %></li>
-            <li><%=active_link_to root_path, class: "dropdown-item", active: :exclusive do %>My Projects<%end %></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><%=active_link_to new_project_path, class: "dropdown-item", active: :exclusive do %>New Project<% end %></li>
+            <% if can? :create, Project %>
+              <li><%=active_link_to user_projects_path(current_user), class: "dropdown-item", active: :exclusive do %>My Projects<%end %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%=active_link_to new_project_path, class: "dropdown-item", active: :exclusive do %>New Project<% end %></li>
+            <% end %>
           </ul>
         </li>
 
         <li class="nav-item">
-          <%=active_link_to root_path, class: "nav-link", active: :exclusive do %>My Tasks<%end %>
+          <%=active_link_to user_tasks_path(current_user), class: "nav-link", active: :exclusive do %>My Tasks<%end %>
         </li>
       </ul>
     </div>

@@ -1,31 +1,8 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Title</th>
-      <th scope="col">Due Date</th>
-      <th scope="col">Description</th>
-      <th scope="col">Tasks</th>
-      <th scope="col">Progress</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr class="<%=project_status_class(project) %>">
-        <td>
-          <% if project_status_text(project) %>
-          <span class="badge text-bg-info"><%=project_status_text(project) %></span>
-          <% end %>
-          <%= link_to project.title, project_path(project) %>
-        </td>
-        <td><%= project.due_date.strftime("%m/%d/%Y") %></td>
-        <td><%= project.description.truncate(60, separator: ' ') %></td>
-        <td><%= project.work_tasks.size %></td>
-        <td>
-          <div class="progress mt-1" role="progressbar" aria-label="Basic example" aria-valuenow="<%=project_status_bar(project) %>" aria-valuemin="0" aria-valuemax="100">
-            <div class="progress-bar" style="width: <%=project_status_bar(project) %>%"></div>
-          </div>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-12">
+    <h2>All Projects</h2>
+  </div>
+  <div class="col-12">
+    <%= render partial: "project_table", locals: { projects: @projects } %>
+  </div>
+</div>

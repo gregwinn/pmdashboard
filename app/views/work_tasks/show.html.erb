@@ -61,7 +61,7 @@
     <%=link_to "New Subtask", new_project_work_task_path(@work_task.project, parent_id: @work_task.id), class: "btn btn-primary btn-sm float-end" %>
   </div>
   <div class="col-12">
-    <%=render partial: "task_table", locals: { subtasks: @work_task.subtasks } %>
+    <%=render partial: "subtask_table", locals: { subtasks: @work_task.subtasks } %>
   </div>
 </div>
 <% end %>

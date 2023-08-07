@@ -15,4 +15,20 @@ module WorkTasksHelper
       "#{status.titleize}"
     end
   end
+
+  def work_task_status_class(work_task)
+    if work_task.due_date < Date.today
+      "bg-danger"
+    elsif work_task.due_date < Date.today + 7
+      "bg-warning"
+    end
+  end
+
+  def work_task_status_text(work_task)
+    if work_task.due_date < Date.today
+      "Late"
+    elsif work_task.due_date < Date.today + 7
+      "Due Soon"
+    end
+  end
 end

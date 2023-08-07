@@ -31,29 +31,7 @@
   </div>
 
   <div class="col-12">
-      <table class="table">
-        <tr>
-          <th>Task</th>
-          <th>Status</th>
-          <th>Due Date</th>
-          <th>Progress</th>
-        </tr>
-        <% @project.work_tasks.top_level.each do |task| %>
-          <tr>
-            <td><%= link_to task.title, project_work_task_path(@project, task) %></td>
-            <td><%= task.status.titleize %></td>
-            <td><%= task.due_date %></td>
-            <td>
-              <% if task.has_subtasks? %>
-                <div class="progress mt-1" role="progressbar" aria-label="Basic example" aria-valuenow="<%=subtask_status_bar(task) %>" aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar" style="width: <%=subtask_status_bar(task) %>%"></div>
-                </div>
-              <% else %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </table>
+      <%=render partial: "work_tasks/task_table", locals: { work_tasks: @project.work_tasks.top_level } %>
   </div>
 
 </div>
