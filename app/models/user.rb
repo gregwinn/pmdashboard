@@ -4,7 +4,8 @@ class User < ApplicationRecord
   has_many :assigned_tasks, class_name: "WorkTask", foreign_key: "user_assignment_id"  # tasks assigned to this user
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
 
   validates :email, presence:true, uniqueness: true
 
